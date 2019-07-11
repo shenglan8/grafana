@@ -11,10 +11,11 @@ export class AppPageCtrl {
   navModel: any;
 
   /** @ngInject */
-  constructor(private $routeParams: any, private $rootScope, private navModelSrv) {
+  constructor(private $routeParams: any, private $rootScope, private navModelSrv, private $q) {
     this.pluginId = $routeParams.pluginId;
 
-    getPluginSettings(this.pluginId)
+    this.$q
+      .when(getPluginSettings(this.pluginId))
       .then(settings => {
         this.initPage(settings);
       })
@@ -34,7 +35,7 @@ export class AppPageCtrl {
       return;
     }
     if (app.type !== 'app' || !app.enabled) {
-      this.$rootScope.appEvent('alert-error', ['Applicaiton Not Enabled', '']);
+      this.$rootScope.appEvent('alert-error', ['Application Not Enabled', '']);
       this.navModel = this.navModelSrv.getNotFoundNav();
       return;
     }

@@ -24,13 +24,14 @@ const (
 	DS_ACCESS_PROXY  = "proxy"
 	DS_STACKDRIVER   = "stackdriver"
 	DS_AZURE_MONITOR = "grafana-azure-monitor-datasource"
+	DS_LOKI          = "loki"
 )
 
 var (
 	ErrDataSourceNotFound           = errors.New("Data source not found")
 	ErrDataSourceNameExists         = errors.New("Data source with same name already exists")
 	ErrDataSourceUpdatingOldVersion = errors.New("Trying to update old version of datasource")
-	ErrDatasourceIsReadOnly         = errors.New("Data source is readonly. Can only be updated from configuration.")
+	ErrDatasourceIsReadOnly         = errors.New("Data source is readonly. Can only be updated from configuration")
 	ErrDataSourceAccessDenied       = errors.New("Data source access denied")
 )
 
@@ -82,37 +83,41 @@ func (ds *DataSource) decryptedValue(field string, fallback string) string {
 }
 
 var knownDatasourcePlugins = map[string]bool{
-	DS_ES:                                 true,
-	DS_GRAPHITE:                           true,
-	DS_INFLUXDB:                           true,
-	DS_INFLUXDB_08:                        true,
-	DS_KAIROSDB:                           true,
-	DS_CLOUDWATCH:                         true,
-	DS_PROMETHEUS:                         true,
-	DS_OPENTSDB:                           true,
-	DS_POSTGRES:                           true,
-	DS_MYSQL:                              true,
-	DS_MSSQL:                              true,
-	DS_STACKDRIVER:                        true,
-	DS_AZURE_MONITOR:                      true,
-	"opennms":                             true,
-	"abhisant-druid-datasource":           true,
-	"dalmatinerdb-datasource":             true,
-	"gnocci":                              true,
-	"zabbix":                              true,
-	"newrelic-app":                        true,
-	"grafana-datadog-datasource":          true,
-	"grafana-simple-json":                 true,
-	"grafana-splunk-datasource":           true,
-	"udoprog-heroic-datasource":           true,
-	"grafana-openfalcon-datasource":       true,
-	"opennms-datasource":                  true,
-	"rackerlabs-blueflood-datasource":     true,
-	"crate-datasource":                    true,
-	"ayoungprogrammer-finance-datasource": true,
-	"monasca-datasource":                  true,
-	"vertamedia-clickhouse-datasource":    true,
-	"alexanderzobnin-zabbix-datasource":   true,
+	DS_ES:                                    true,
+	DS_GRAPHITE:                              true,
+	DS_INFLUXDB:                              true,
+	DS_INFLUXDB_08:                           true,
+	DS_KAIROSDB:                              true,
+	DS_CLOUDWATCH:                            true,
+	DS_PROMETHEUS:                            true,
+	DS_OPENTSDB:                              true,
+	DS_POSTGRES:                              true,
+	DS_MYSQL:                                 true,
+	DS_MSSQL:                                 true,
+	DS_STACKDRIVER:                           true,
+	DS_AZURE_MONITOR:                         true,
+	DS_LOKI:                                  true,
+	"opennms":                                true,
+	"abhisant-druid-datasource":              true,
+	"dalmatinerdb-datasource":                true,
+	"gnocci":                                 true,
+	"zabbix":                                 true,
+	"newrelic-app":                           true,
+	"grafana-datadog-datasource":             true,
+	"grafana-simple-json":                    true,
+	"grafana-splunk-datasource":              true,
+	"udoprog-heroic-datasource":              true,
+	"grafana-openfalcon-datasource":          true,
+	"opennms-datasource":                     true,
+	"rackerlabs-blueflood-datasource":        true,
+	"crate-datasource":                       true,
+	"ayoungprogrammer-finance-datasource":    true,
+	"monasca-datasource":                     true,
+	"vertamedia-clickhouse-datasource":       true,
+	"alexanderzobnin-zabbix-datasource":      true,
+	"grafana-influxdb-flux-datasource":       true,
+	"doitintl-bigquery-datasource":           true,
+	"grafana-azure-data-explorer-datasource": true,
 }
 
 func IsKnownDataSourcePlugin(dsType string) bool {

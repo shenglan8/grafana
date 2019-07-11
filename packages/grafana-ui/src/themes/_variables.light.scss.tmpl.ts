@@ -27,6 +27,8 @@ $black: ${theme.colors.black};
 
 $dark-1: ${theme.colors.dark1};
 $dark-2: ${theme.colors.dark2};
+$dark-4: ${theme.colors.dark4};
+$dark-10: ${theme.colors.dark10};
 $gray-1: ${theme.colors.gray1};
 $gray-2: ${theme.colors.gray2};
 $gray-3: ${theme.colors.gray3};
@@ -196,7 +198,7 @@ $input-color-select-arrow: $gray-1;
 $placeholderText: $gray-2;
 
 // search
-$search-shadow: 0 5px 30px 0 $gray-4;
+$search-shadow: 0 1px 5px 0 $gray-5;
 $search-filter-box-bg: $gray-7;
 
 // Typeahead
@@ -269,6 +271,7 @@ $alert-info-bg: linear-gradient(100deg, $blue-base, $blue-shade);
 $popover-bg: $page-bg;
 $popover-color: $text-color;
 $popover-border-color: $gray-5;
+$popover-header-bg: $gray-5;
 $popover-shadow: 0 0 20px $white;
 
 $popover-help-bg: $btn-secondary-bg;
@@ -382,4 +385,8 @@ $button-toggle-group-btn-seperator-border: 1px solid $gray-6;
 $vertical-resize-handle-bg: $gray-4;
 $vertical-resize-handle-dots: $gray-3;
 $vertical-resize-handle-dots-hover: $gray-2;
+
+// Calendar
+$calendar-bg-days: $white;
+$calendar-bg-now: $gray-6;
 `;

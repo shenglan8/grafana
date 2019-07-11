@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, ReactElement } from 'react';
 import Select, { SelectOptionItem } from './Select';
-import { PopperContent } from '@grafana/ui/src/components/Tooltip/PopperController';
+import { PopperContent } from '../Tooltip/PopperController';
 
 interface ButtonComponentProps {
-  label: string | undefined;
+  label: ReactElement | string | undefined;
   className: string | undefined;
   iconClass?: string;
 }
@@ -21,29 +21,31 @@ const ButtonComponent = (buttonProps: ButtonComponentProps) => (props: any) => {
       <div className="select-button">
         {iconClass && <i className={`select-button-icon ${iconClass}`} />}
         <span className="select-button-value">{label ? label : ''}</span>
-        <i className="fa fa-caret-down fa-fw" />
+        {!props.menuIsOpen && <i className="fa fa-caret-down fa-fw" />}
+        {props.menuIsOpen && <i className="fa fa-caret-up fa-fw" />}
       </div>
     </button>
   );
 };
 
-export interface Props {
+export interface Props<T> {
   className: string | undefined;
-  options: SelectOptionItem[];
-  value: SelectOptionItem;
-  label?: string;
+  options: Array<SelectOptionItem<T>>;
+  value?: SelectOptionItem<T>;
+  label?: ReactElement | string;
   iconClass?: string;
   components?: any;
   maxMenuHeight?: number;
-  onChange: (item: SelectOptionItem) => void;
+  onChange: (item: SelectOptionItem<T>) => void;
   tooltipContent?: PopperContent<any>;
   isMenuOpen?: boolean;
   onOpenMenu?: () => void;
   onCloseMenu?: () => void;
+  tabSelectsValue?: boolean;
 }
 
-export class ButtonSelect extends PureComponent<Props> {
-  onChange = (item: SelectOptionItem) => {
+export class ButtonSelect<T> extends PureComponent<Props<T>> {
+  onChange = (item: SelectOptionItem<T>) => {
     const { onChange } = this.props;
     onChange(item);
   };
@@ -61,6 +63,7 @@ export class ButtonSelect extends PureComponent<Props> {
       isMenuOpen,
       onOpenMenu,
       onCloseMenu,
+      tabSelectsValue,
     } = this.props;
     const combinedComponents = {
       ...components,
@@ -74,14 +77,15 @@ export class ButtonSelect extends PureComponent<Props> {
         isSearchable={false}
         options={options}
         onChange={this.onChange}
-        defaultValue={value}
+        value={value}
+        isOpen={isMenuOpen}
+        onOpenMenu={onOpenMenu}
+        onCloseMenu={onCloseMenu}
         maxMenuHeight={maxMenuHeight}
         components={combinedComponents}
         className="gf-form-select-box-button-select"
         tooltipContent={tooltipContent}
-        isOpen={isMenuOpen}
-        onOpenMenu={onOpenMenu}
-        onCloseMenu={onCloseMenu}
+        tabSelectsValue={tabSelectsValue}
       />
     );
   }

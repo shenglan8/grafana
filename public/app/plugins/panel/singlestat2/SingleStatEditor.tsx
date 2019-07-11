@@ -3,13 +3,14 @@ import React, { PureComponent } from 'react';
 import {
   PanelEditorProps,
   ThresholdsEditor,
-  Threshold,
   PanelOptionsGrid,
   ValueMappingsEditor,
-  ValueMapping,
-  SingleStatValueOptions,
-  SingleStatValueEditor,
+  FieldDisplayOptions,
+  FieldDisplayEditor,
+  FieldPropertiesEditor,
+  PanelOptionsGroup,
 } from '@grafana/ui';
+import { Threshold, ValueMapping, Field } from '@grafana/data';
 
 import { SingleStatOptions, SparklineOptions } from './types';
 import { ColoringEditor } from './ColoringEditor';
@@ -18,21 +19,21 @@ import { SparklineEditor } from './SparklineEditor';
 
 export class SingleStatEditor extends PureComponent<PanelEditorProps<SingleStatOptions>> {
   onThresholdsChanged = (thresholds: Threshold[]) =>
-    this.props.onOptionsChange({
-      ...this.props.options,
+    this.onDisplayOptionsChanged({
+      ...this.props.options.fieldOptions,
       thresholds,
     });
 
-  onValueMappingsChanged = (valueMappings: ValueMapping[]) =>
-    this.props.onOptionsChange({
-      ...this.props.options,
-      valueMappings,
+  onValueMappingsChanged = (mappings: ValueMapping[]) =>
+    this.onDisplayOptionsChanged({
+      ...this.props.options.fieldOptions,
+      mappings,
     });
 
-  onValueOptionsChanged = (valueOptions: SingleStatValueOptions) =>
+  onDisplayOptionsChanged = (fieldOptions: FieldDisplayOptions) =>
     this.props.onOptionsChange({
       ...this.props.options,
-      valueOptions,
+      fieldOptions,
     });
 
   onSparklineChanged = (sparkline: SparklineOptions) =>
@@ -41,21 +42,36 @@ export class SingleStatEditor extends PureComponent<PanelEditorProps<SingleStatO
       sparkline,
     });
 
+  onDefaultsChange = (field: Partial<Field>) => {
+    this.onDisplayOptionsChanged({
+      ...this.props.options.fieldOptions,
+      override: field,
+    });
+  };
+
   render() {
     const { options } = this.props;
+    const { fieldOptions } = options;
 
     return (
       <>
         <PanelOptionsGrid>
-          <SingleStatValueEditor onChange={this.onValueOptionsChanged} options={options.valueOptions} />
+          <PanelOptionsGroup title="Display">
+            <FieldDisplayEditor onChange={this.onDisplayOptionsChanged} value={fieldOptions} />
+          </PanelOptionsGroup>
+
+          <PanelOptionsGroup title="Field (default)">
+            <FieldPropertiesEditor showMinMax={true} onChange={this.onDefaultsChange} value={fieldOptions.defaults} />
+          </PanelOptionsGroup>
+
           <FontSizeEditor options={options} onChange={this.props.onOptionsChange} />
           <ColoringEditor options={options} onChange={this.props.onOptionsChange} />
           <SparklineEditor options={options.sparkline} onChange={this.onSparklineChanged} />
 
-          <ThresholdsEditor onChange={this.onThresholdsChanged} thresholds={options.thresholds} />
+          <ThresholdsEditor onChange={this.onThresholdsChanged} thresholds={fieldOptions.thresholds} />
         </PanelOptionsGrid>
 
-        <ValueMappingsEditor onChange={this.onValueMappingsChanged} valueMappings={options.valueMappings} />
+        <ValueMappingsEditor onChange={this.onValueMappingsChanged} valueMappings={fieldOptions.mappings} />
       </>
     );
   }
